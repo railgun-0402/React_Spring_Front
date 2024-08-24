@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from "react";
 
-export const ApiFetch = () => {
-  interface Stone {
-    month: string;
-    color: string;
+export const ApiUser = () => {
+  interface User {
+    id: number;
     name: string;
+    password: string;
+    coin: number;
   }
 
-  const [stones, setStone] = useState<Stone>();
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     // API Fetch
-    fetch("http://localhost:8080/api", { method: "GET" })
+    fetch("http://localhost:8080/test", { method: "GET" })
       // レスポンスのデータ形式をjsonに設定
       .then((res) => res.json())
       // レスポンスのデータのセット
       .then((data) => {
-        setStone(data);
+        setUser(data);
       });
   }, []);
 
-  if (stones) {
+  if (user) {
     return (
       <div>
         <ul>
-          <li>{stones?.month}</li>
-          <li>{stones?.color}</li>
-          <li>{stones?.name}</li>
+          <li>{user?.id}</li>
+          <li>{user?.name}</li>
+          <li>{user?.coin}</li>
         </ul>
       </div>
     );

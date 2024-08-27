@@ -26,11 +26,6 @@ a:hover {
   box-sizing: border-box;
 }
 
-.btn {
-  background-color: #5196a6 !important;
-  transition: 0.1s;
-}
-
 .btn:hover {
   opacity: 0.8;
 }

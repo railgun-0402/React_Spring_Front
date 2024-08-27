@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { AdminDetail } from "./detail/index";
 import Table from "react-bootstrap/Table";
-import "../../css/admin/style.css";
+import "./style.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 
 interface Hotel {
   id: number;
@@ -16,8 +23,25 @@ interface HotelListProps {
   hotels: Hotel[];
 }
 
-export const HotelShow = () => {
+// 画面遷移制御
+export function Admin() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HotelShow />} />
+        <Route path="/detail/:id" element={<AdminDetail />} />
+      </Routes>
+    </Router>
+  );
+}
+
+const HotelShow = () => {
   const [hotels, setHotels] = useState<Hotel[]>();
+  const navigate = useNavigate();
+
+  const Hoge = (id: number) => {
+    navigate(`/detail/${id}`, { state: { id } });
+  };
 
   const HotelList: React.FC<HotelListProps> = ({ hotels }) => {
     return (
@@ -28,8 +52,8 @@ export const HotelShow = () => {
               <h1 className="mb-4 text-center">民宿一覧</h1>
 
               <div className="d-flex justify-content-end">
-                <a href="/" className="btn text-white shadow-sm mb-3 btn">
-                  登録
+                <a href="/" className="btn btn-dark mb-3">
+                  新規登録
                 </a>
               </div>
 
@@ -42,6 +66,7 @@ export const HotelShow = () => {
                     <th scope="col">住所</th>
                     <th scope="col">電話番号</th>
                     <th scope="col">詳細</th>
+                    <th scope="col">削除</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -53,7 +78,20 @@ export const HotelShow = () => {
                       <td>{hotel.address}</td>
                       <td>{hotel.phoneNumber}</td>
                       <td>
-                        <a href="/">詳細</a>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => Hoge(hotel.id)}
+                        >
+                          詳細
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => Hoge(hotel.id)}
+                        >
+                          削除
+                        </button>
                       </td>
                     </tr>
                   ))}

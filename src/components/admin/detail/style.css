@@ -1,0 +1,8 @@
+.hoge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 画面の高さ全体を使用 */
+  text-align: center; /* テキストを中央揃え */
+  flex-direction: column; /* 縦方向に要素を並べる */
+}

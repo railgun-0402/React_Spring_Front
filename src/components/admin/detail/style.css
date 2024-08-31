@@ -1,8 +1,10 @@
-.hoge {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* 画面の高さ全体を使用 */
-  text-align: center; /* テキストを中央揃え */
-  flex-direction: column; /* 縦方向に要素を並べる */
+.pre-wrap {
+  /* 改行文字で行を折り返す */
+  white-space: pre-wrap;
+}
+
+@media screen and (min-width: 1400px) {
+  .container {
+    max-width: 1200px;
+  }
 }

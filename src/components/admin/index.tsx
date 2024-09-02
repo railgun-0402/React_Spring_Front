@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AdminDetail } from "./detail/index";
+import { AdminRegister } from "./register";
 import Table from "react-bootstrap/Table";
 import "./style.css";
 import {
@@ -30,6 +31,7 @@ export function Admin() {
       <Routes>
         <Route path="/" element={<HotelShow />} />
         <Route path="/detail/:id" element={<AdminDetail />} />
+        <Route path="/detail/register" element={<AdminRegister />} />
       </Routes>
     </Router>
   );
@@ -39,8 +41,14 @@ const HotelShow = () => {
   const [hotels, setHotels] = useState<Hotel[]>();
   const navigate = useNavigate();
 
-  const Hoge = (id: number) => {
+  // 旅館詳細画面へ遷移
+  const MoveToDetail = (id: number) => {
     navigate(`/detail/${id}`, { state: { id } });
+  };
+
+  // 新規登録画面へ遷移
+  const MoveToRegister = () => {
+    navigate(`/detail/register`);
   };
 
   const HotelList: React.FC<HotelListProps> = ({ hotels }) => {
@@ -52,9 +60,9 @@ const HotelShow = () => {
               <h1 className="mb-4 text-center">民宿一覧</h1>
 
               <div className="d-flex justify-content-end">
-                <a href="/" className="btn btn-dark mb-3">
+                <button onClick={MoveToRegister} className="btn btn-dark mb-3">
                   新規登録
-                </a>
+                </button>
               </div>
 
               <Table striped bordered hover>
@@ -80,7 +88,7 @@ const HotelShow = () => {
                       <td>
                         <button
                           className="btn btn-primary"
-                          onClick={() => Hoge(hotel.id)}
+                          onClick={() => MoveToDetail(hotel.id)}
                         >
                           詳細
                         </button>
@@ -88,7 +96,7 @@ const HotelShow = () => {
                       <td>
                         <button
                           className="btn btn-danger"
-                          onClick={() => Hoge(hotel.id)}
+                          onClick={() => MoveToDetail(hotel.id)}
                         >
                           削除
                         </button>

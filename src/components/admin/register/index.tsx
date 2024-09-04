@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface Hotel {
   name: string;
-  image: File | null;
+  imageName: string;
+  image: string;
   description: string;
   price: number;
   capacity: number;
@@ -12,55 +13,49 @@ interface Hotel {
   phoneNumber: string;
 }
 
-interface HotelListProps {
-  hotels: Hotel;
-}
-
 const HotelRegister = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Hotel>();
+
+  // フォームに画像を表示するための値
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [formState, setFormState] = useState<Hotel>({
-    name: "",
-    image: null,
-    description: "",
-    price: 0,
-    capacity: 0,
-    postalCode: "",
-    address: "",
-    phoneNumber: "",
-  });
 
-  // 入力内容を変更時
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
+  // アップロード画像ファイルの管理
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
+    const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setImageUrl(url);
+      const name = file.name;
+      setImageUrl(URL.createObjectURL(file));
+      setValue("imageName", name);
+    } else {
+      setValue("imageName", "");
     }
-    setFormState((prevState) => ({
-      ...prevState,
-      image: file,
-    }));
   };
 
   // 送信ボタン押下時
-  const onSubmit: SubmitHandler<Hotel> = (data) => {
+  const OnSubmit: SubmitHandler<Hotel> = (data) => {
     console.log("Form submitted:", data);
-    // Form submission logic goes here
+    const url = "http://localhost:8080/admin/hotels/register";
+    try {
+      // 旅館新規追加のAPI
+      const result = fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      console.log("success!");
+      console.log(result);
+    } catch (error) {
+      console.log("failed・・・");
+      console.error(`error = ${error}`);
+    }
   };
 
   return (
@@ -80,7 +75,7 @@ const HotelRegister = () => {
             </nav>
             <h1 className="mb-4 text-center">民宿登録</h1>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(OnSubmit)}>
               {/* 宿泊施設名 */}
               <div className="form-group row mb-3">
                 <div className="col-md-4">
@@ -132,9 +127,8 @@ const HotelRegister = () => {
                     {...register("image", {
                       required: "画像のアップロードは必須です。",
                       onChange: (e) => {
-                        console.log(e);
                         handleFileChange(e);
-                        return e.target.files?.[0];
+                        return e.target.files?.[0].name;
                       },
                     })}
                   />
@@ -177,7 +171,7 @@ const HotelRegister = () => {
                     placeholder="必須"
                     className="form-control"
                     id="description"
-                    {...register("name", {
+                    {...register("description", {
                       required: "宿泊説明は必須です。",
                     })}
                     cols={30}
@@ -369,15 +363,6 @@ const HotelRegister = () => {
 };
 
 export const AdminRegister = () => {
-  //   useEffect(() => {
-  //     // 旅館新規追加のAPI
-  //     fetch(`http://localhost:8080/admin/hotels/register`, {
-  //       method: "GET",
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => {});
-  //   });
-
   return (
     <div>
       <HotelRegister />

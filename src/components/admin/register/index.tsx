@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 interface Hotel {
   name: string;
@@ -23,6 +24,7 @@ const HotelRegister = () => {
 
   // フォームに画像を表示するための値
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // アップロード画像ファイルの管理
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +54,9 @@ const HotelRegister = () => {
 
       console.log("success!");
       console.log(result);
+
+      // 成功したら画面一覧に戻る
+      navigate(`/`);
     } catch (error) {
       console.log("failed・・・");
       console.error(`error = ${error}`);
@@ -66,7 +71,7 @@ const HotelRegister = () => {
             <nav className="mb-4" aria-label="breadcrumb">
               <ol className="breadcrumb mb-0">
                 <li className="breadcrumb-item">
-                  <a href="@{/admin/houses}">民宿一覧</a>
+                  <a href="/">民宿一覧</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   民宿登録

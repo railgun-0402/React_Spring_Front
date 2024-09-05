@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { AdminDetail } from "./detail/index";
 import { AdminRegister } from "./register";
+import { ConfirmDialog } from "../dialog/index";
 import Table from "react-bootstrap/Table";
+import axios from "axios";
 import "./style.css";
 import {
   BrowserRouter as Router,
@@ -38,8 +40,22 @@ export function Admin() {
 }
 
 const HotelShow = () => {
-  const [hotels, setHotels] = useState<Hotel[]>();
+  /** アラート表示時間(ms) */
+  const showAlertTime = 3000;
+  /** 画面遷移 */
   const navigate = useNavigate();
+  /** 削除API用 hotelId */
+  const [id, setId] = useState(0);
+  /** ホテル情報 */
+  const [hotels, setHotels] = useState<Hotel[]>();
+  /** ダイアログ表示制御 */
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  /** アラートメッセージ */
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  /** アラートデザイン */
+  const [alertDesignName, setAlertDesignName] = useState<string | undefined>(
+    ""
+  );
 
   // 旅館詳細画面へ遷移
   const MoveToDetail = (id: number) => {
@@ -51,6 +67,45 @@ const HotelShow = () => {
     navigate(`/detail/register`);
   };
 
+  // 削除ボタン押下→ダイアログ表示
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  // 確認ダイアログで「いいえ」を押下
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  // 確認ダイアログで「はい」を押下
+  const handleConfirm = async () => {
+    // 施設削除APIを実行
+    const response = await axios.get(
+      `http://localhost:8080/admin/hotels/delete/${id}`,
+      {
+        method: "GET",
+      }
+    );
+    console.log("API Response:", response);
+
+    if (response.status === 200) {
+      setAlertDesignName("alert alert-success");
+      showAlert("削除が成功しました！");
+    } else {
+      setAlertDesignName("alert alert-danger");
+      showAlert("削除が失敗しました・・・");
+    }
+    setIsDialogOpen(false);
+  };
+
+  // アラート表示
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, showAlertTime);
+  };
+
   const HotelList: React.FC<HotelListProps> = ({ hotels }) => {
     return (
       <div className="wrapper">
@@ -59,12 +114,28 @@ const HotelShow = () => {
             <div className="col-xxl-9 col-xl-10 col-lg-11">
               <h1 className="mb-4 text-center">民宿一覧</h1>
 
+              {/* アラートの表示(追加/削除時に3秒間表示) */}
+              {alertMessage && (
+                <div className={alertDesignName} role="alert">
+                  {alertMessage}
+                </div>
+              )}
+
+              {/* 新規登録ボタン */}
               <div className="d-flex justify-content-end">
                 <button onClick={MoveToRegister} className="btn btn-dark mb-3">
                   新規登録
                 </button>
               </div>
 
+              {/* 削除時確認ダイアログ */}
+              <ConfirmDialog
+                isOpen={isDialogOpen}
+                onClose={handleCloseDialog}
+                onConfirm={handleConfirm}
+              />
+
+              {/* 施設一覧テーブル */}
               <Table striped bordered hover>
                 <thead>
                   <tr>
@@ -86,6 +157,7 @@ const HotelShow = () => {
                       <td>{hotel.address}</td>
                       <td>{hotel.phoneNumber}</td>
                       <td>
+                        {/* 施設詳細遷移 */}
                         <button
                           className="btn btn-primary"
                           onClick={() => MoveToDetail(hotel.id)}
@@ -94,9 +166,13 @@ const HotelShow = () => {
                         </button>
                       </td>
                       <td>
+                        {/* 施設詳細削除ボタン */}
                         <button
                           className="btn btn-danger"
-                          onClick={() => MoveToDetail(hotel.id)}
+                          onClick={() => {
+                            setId(hotel.id);
+                            handleOpenDialog();
+                          }}
                         >
                           削除
                         </button>

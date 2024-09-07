@@ -31,9 +31,9 @@ export function Admin() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HotelShow />} />
-        <Route path="/detail/:id" element={<AdminDetail />} />
-        <Route path="/detail/register" element={<AdminRegister />} />
+        <Route path="/admin/hotels" element={<HotelShow />} />
+        <Route path="/hotels/detail/:id" element={<AdminDetail />} />
+        <Route path="/hotels/detail/register" element={<AdminRegister />} />
       </Routes>
     </Router>
   );

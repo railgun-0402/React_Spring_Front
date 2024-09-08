@@ -11,13 +11,13 @@ export const Header = () => {
 
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <a className="nav-link" href="/login">
               ログアウト
             </a>
           </li>
 
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <a className="nav-link" href="/">
               会員登録
             </a>
           </li>

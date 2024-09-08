@@ -1,0 +1,46 @@
+/* ページのタイトルスタイル */
+.title {
+  color: #2c3e50;
+  font-weight: bold;
+  font-size: 2.5rem;
+}
+
+/* カードのカスタムスタイル */
+.custom-card {
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ボタンのカスタムスタイル */
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-warning {
+  border-width: 2px;
+  font-weight: bold;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-warning:hover {
+  background-color: transparent;
+  color: #fff;
+}
+
+/* 各テーマ色の背景色 */
+.btn-outline-primary:hover {
+  background-color: #007bff;
+}
+
+.btn-outline-success:hover {
+  background-color: #28a745;
+}
+
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+}

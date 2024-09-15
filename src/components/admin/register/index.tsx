@@ -71,7 +71,7 @@ const HotelRegister = () => {
             <nav className="mb-4" aria-label="breadcrumb">
               <ol className="breadcrumb mb-0">
                 <li className="breadcrumb-item">
-                  <a href="/">民宿一覧</a>
+                  <a href="/admin/hotels">民宿一覧</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   民宿登録

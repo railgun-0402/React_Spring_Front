@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { AdminDetail } from "./detail/index";
-import { AdminRegister } from "./register";
 import { ConfirmDialog } from "../dialog/index";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
@@ -38,8 +36,6 @@ export function Admin() {
     <Router>
       <Routes>
         <Route path="/admin/hotels" element={<HotelShow />} />
-        <Route path="/hotels/detail/:id" element={<AdminDetail />} />
-        <Route path="/hotels/detail/register" element={<AdminRegister />} />
       </Routes>
     </Router>
   );
@@ -75,12 +71,12 @@ const HotelShow = () => {
 
   // 旅館詳細画面へ遷移
   const MoveToDetail = (id: number) => {
-    navigate(`/detail/${id}`, { state: { id } });
+    navigate(`/admin/hotels/detail/${id}`, { state: { id } });
   };
 
   // 新規登録画面へ遷移
   const MoveToRegister = () => {
-    navigate(`/detail/register`);
+    navigate(`/admin/hotels/detail/register`);
   };
 
   // 削除ボタン押下→ダイアログ表示

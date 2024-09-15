@@ -1,5 +1,7 @@
 import Admin from "../admin/index";
 import { Login } from "../auth/login";
+import { AdminDetail } from "../admin/detail/index";
+import { AdminRegister } from "../admin/register/index";
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,8 +19,13 @@ export function HomeScreen() {
         <Route path="/" element={<Home />} />
         {/* Login画面 */}
         <Route path="/login" element={<Login />} />
+
         {/* ホテル管理画面 */}
         <Route path="/admin/hotels" element={<Admin />} />
+        {/* ホテル詳細画面 */}
+        <Route path="/admin/hotels/detail/:id" element={<AdminDetail />} />
+        {/* ホテル新規登録画面 */}
+        <Route path="/admin/hotels/detail/register" element={<AdminRegister />} />
       </Routes>
     </Router>
   );

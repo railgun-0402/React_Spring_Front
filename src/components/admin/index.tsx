@@ -5,13 +5,13 @@ import { ConfirmDialog } from "../dialog/index";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import "./style.css";
-import { useForm } from "react-hook-form";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useNavigate,
 } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface Hotel {
   id: number;
@@ -25,6 +25,11 @@ interface Hotel {
 
 interface HotelListProps {
   hotels: Hotel[];
+}
+
+/* 検索ワード */
+interface Search {
+  word: string
 }
 
 // 画面遷移制御
@@ -58,6 +63,16 @@ const HotelShow = () => {
     ""
   );
 
+  /* APIのURL*/
+  const listAPIUrl = "http://localhost:8080/admin/hotels";
+  const searchAPIUrl = "http://localhost:8080/admin/hotels/search";
+  const deleteAPIUrl = "http://localhost:8080/admin/hotels/delete";
+
+  const {
+    register,
+    handleSubmit
+  } = useForm<Search>();
+
   // 旅館詳細画面へ遷移
   const MoveToDetail = (id: number) => {
     navigate(`/detail/${id}`, { state: { id } });
@@ -82,7 +97,7 @@ const HotelShow = () => {
   const handleConfirm = async () => {
     // 施設削除APIを実行
     const response = await axios.get(
-      `http://localhost:8080/admin/hotels/delete/${id}`,
+      `${deleteAPIUrl}/${id}`,
       {
         method: "GET",
       }
@@ -100,26 +115,17 @@ const HotelShow = () => {
   };
 
   // 検索ボタン押下時
-  const handleSearch = async () => {
-    // 施設検索API実行
-    const response = await axios.get(
-      `http://localhost:8080/admin/hotels/search/${id}`,
-      {
-        method: "GET",
-      }
-    );
-    console.log(response);
+  const handleSearch: SubmitHandler<Search> = async(data) => {
+    // 空でAPIをリクエストするとエラーになる
+    if (!data.word || data.word.trim() === "") return;
 
-    if (response.status === 200) {
-      if (hotels?.length !== 0 && hotels !== undefined) {
-        return (
-          <div>
-            {/* 検索された施設を画面に描画 */}
-            <HotelList hotels={response.data} />
-          </div>
-        );
-      }
-    }
+    // 施設検索API実行
+    const url = `${searchAPIUrl}/${data.word}`;
+    fetch(url, { method: "GET" })
+      .then((res) => res.json())
+      .then((data) => {
+        setHotels(data);
+      });
   };
 
   // アラート表示
@@ -147,16 +153,17 @@ const HotelShow = () => {
 
               {/* 検索フォーム */}
               <div className="d-flex justify-content-between flex-wrap">
-                <form className="mb-3">
+                <form className="mb-3" onSubmit={handleSubmit(handleSearch)}>
                   <div className="input-group">
                     <input
                       type="text"
                       className="form-control"
-                      name="keyword"
+                      id="word"
                       placeholder="施設名"
+                      {...register("word")}
                     />
                     <button
-                      onClick={handleSearch}
+                      // onClick={handleSearch}
                       type="submit"
                       className="btn shadow-sm btn-primary"
                     >
@@ -235,7 +242,7 @@ const HotelShow = () => {
 
   useEffect(() => {
     // 旅館一覧画面(管理)のAPI
-    fetch("http://localhost:8080/admin/hotels", { method: "GET" })
+    fetch(listAPIUrl, { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
         setHotels(data);

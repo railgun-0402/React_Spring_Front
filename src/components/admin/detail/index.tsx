@@ -1,6 +1,9 @@
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import "./style.css";
+import { 
+  useNavigate,
+} from "react-router-dom";
 
 // public画像のパス
 const publicHotelImageDir = "/images/hotel";
@@ -23,6 +26,14 @@ interface HotelListProps {
 }
 
 const HotelDetail: React.FC<HotelListProps> = ({ hotel }) => {
+  const navigate = useNavigate();
+
+  // 編集画面へ遷移
+  const moveToEdit = (id: number) => {
+    navigate(`/admin/hotels/edit/${id}`, { state: { id } });
+  };
+
+
   // 画像が見つからない場合やDBから読み込めない場合
   const handleErr = (event: any) => {
     // NO IMAGE画像を出す
@@ -52,7 +63,7 @@ const HotelDetail: React.FC<HotelListProps> = ({ hotel }) => {
           {/* 編集 */}
           <div className="d-flex justify-content-end align-items-end mb-3">
             <div>
-              <a href="/">編集</a>
+              <button className="btn btn-link" onClick={() => moveToEdit(hotel.id)}>編集</button>
             </div>
           </div>
           {/* ホテルの画像 */}

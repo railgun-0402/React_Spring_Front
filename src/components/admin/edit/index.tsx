@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface Hotel {
+  id: number;
   name: string;
   imageName: string;
   image: string;
@@ -15,6 +16,10 @@ interface Hotel {
 }
 
 const HotelEdit = () => {
+    // Hotelデータは詳細画面から受け取る
+    const location = useLocation();
+    const { hotel } = location.state as { hotel: Hotel };
+
     const {
         register,
         handleSubmit,
@@ -41,7 +46,7 @@ const HotelEdit = () => {
       // 編集ボタン押下時
       const OnEdit: SubmitHandler<Hotel> = (data) => {
         console.log("Form submitted:", data);
-        const url = "http://localhost:8080/admin/hotels/edit";
+        const url = `http://localhost:8080/admin/hotels/${data.id}/update`;
         try {
           // 旅館編集のAPI
           const result = fetch(url, {
@@ -68,14 +73,15 @@ const HotelEdit = () => {
       <div className="container pt-4 pb-5 samuraitravel-container">
         <div className="row justify-content-center">
           <div className="col-xl-5 col-lg-6 col-md-8">
+
+            {/* パンくずリスト */}
             <nav className="mb-4" aria-label="breadcrumb">
               <ol className="breadcrumb mb-0">
                 <li className="breadcrumb-item">
                   <a href="/admin/hotels">民宿一覧</a>
                 </li>
                 <li className="breadcrumb-item">
-                  {/* TODO: 詳細画面に戻るパスを一旦1にする */}
-                  <a href="/admin/hotels/detail/1">民宿詳細</a>
+                  <a href={`/admin/hotels/detail/${hotel.id}`}>民宿詳細</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   民宿編集
@@ -85,6 +91,13 @@ const HotelEdit = () => {
             <h1 className="mb-4 text-center">民宿編集</h1>
 
             <form onSubmit={handleSubmit(OnEdit)}>
+                {/* 非表示のIDフィールド */}
+               <input
+                   type="hidden"
+                   defaultValue={hotel.id}
+                   {...register("id")}
+               />
+
               {/* 宿泊施設名 */}
               <div className="form-group row mb-3">
                 <div className="col-md-4">
@@ -98,6 +111,7 @@ const HotelEdit = () => {
 
                 <div className="col-md-8">
                   <input
+                    defaultValue={hotel.name}
                     placeholder="必須"
                     className="form-control"
                     type="text"
@@ -177,6 +191,7 @@ const HotelEdit = () => {
 
                 <div className="col-md-8">
                   <textarea
+                    defaultValue={hotel.description}
                     placeholder="必須"
                     className="form-control"
                     id="description"
@@ -210,6 +225,7 @@ const HotelEdit = () => {
                     placeholder="必須"
                     className="form-control"
                     type="text"
+                    defaultValue={hotel.price}
                     id="price"
                     {...register("price", {
                       required: "宿泊料金は必須です。",
@@ -243,6 +259,7 @@ const HotelEdit = () => {
                     className="form-control"
                     placeholder="必須"
                     type="text"
+                    defaultValue={hotel.capacity}
                     id="capacity"
                     {...register("capacity", {
                       required: "定員は必須です。",
@@ -276,6 +293,7 @@ const HotelEdit = () => {
                     placeholder="123-4567"
                     className="form-control"
                     type="text"
+                    defaultValue={hotel.postalCode}
                     id="postalCode"
                     {...register("postalCode", {
                       required: "郵便番号は必須です。",
@@ -310,6 +328,7 @@ const HotelEdit = () => {
                     placeholder="必須"
                     className="form-control"
                     type="text"
+                    defaultValue={hotel.address}
                     id="address"
                     {...register("address", { required: "住所は必須です。" })}
                   />
@@ -337,6 +356,7 @@ const HotelEdit = () => {
                     className="form-control"
                     placeholder="090-XXXX-XXXX"
                     type="text"
+                    defaultValue={hotel.phoneNumber}
                     id="phoneNumber"
                     {...register("phoneNumber", {
                       required: "電話番号は必須です。",

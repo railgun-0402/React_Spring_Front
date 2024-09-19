@@ -30,7 +30,7 @@ const HotelDetail: React.FC<HotelListProps> = ({ hotel }) => {
 
   // 編集画面へ遷移
   const moveToEdit = (id: number) => {
-    navigate(`/admin/hotels/edit/${id}`, { state: { id } });
+    navigate(`/admin/hotels/edit/${hotel.id}`, { state: { hotel } });
   };
 
 
@@ -76,7 +76,6 @@ const HotelDetail: React.FC<HotelListProps> = ({ hotel }) => {
                 onError={handleErr}
               />
             ) : null}
-            ;
           </div>
 
           {/* ホテルの詳細 */}

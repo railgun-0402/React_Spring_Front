@@ -1,25 +1,12 @@
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import "./style.css";
-import { 
-  useNavigate,
-} from "react-router-dom";
+import { Hotel } from "../../../models/Hotel";
+import { useNavigate } from "react-router-dom";
 
 // public画像のパス
 const publicHotelImageDir = "/images/hotel";
 const noImageDir = "/images/404";
-
-interface Hotel {
-  id: number;
-  name: string;
-  imageName: string;
-  description: string;
-  price: number;
-  capacity: number;
-  postalCode: string;
-  address: string;
-  phoneNumber: string;
-}
 
 interface HotelListProps {
   hotel: Hotel;
@@ -32,7 +19,6 @@ const HotelDetail: React.FC<HotelListProps> = ({ hotel }) => {
   const moveToEdit = (id: number) => {
     navigate(`/admin/hotels/edit/${hotel.id}`, { state: { hotel } });
   };
-
 
   // 画像が見つからない場合やDBから読み込めない場合
   const handleErr = (event: any) => {
@@ -63,7 +49,12 @@ const HotelDetail: React.FC<HotelListProps> = ({ hotel }) => {
           {/* 編集 */}
           <div className="d-flex justify-content-end align-items-end mb-3">
             <div>
-              <button className="btn btn-link" onClick={() => moveToEdit(hotel.id)}>編集</button>
+              <button
+                className="btn btn-link"
+                onClick={() => moveToEdit(hotel.id)}
+              >
+                編集
+              </button>
             </div>
           </div>
           {/* ホテルの画像 */}

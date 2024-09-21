@@ -1,79 +1,66 @@
 import React, { useState } from "react";
+import { Hotel } from "../../../models/Hotel";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 
-interface Hotel {
-  id: number;
-  name: string;
-  imageName: string;
-  image: string;
-  description: string;
-  price: number;
-  capacity: number;
-  postalCode: string;
-  address: string;
-  phoneNumber: string;
-}
-
 const HotelEdit = () => {
-    // Hotelデータは詳細画面から受け取る
-    const location = useLocation();
-    const { hotel } = location.state as { hotel: Hotel };
+  // Hotelデータは詳細画面から受け取る
+  const location = useLocation();
+  const { hotel } = location.state as { hotel: Hotel };
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-      } = useForm<Hotel>();
-    
-      // フォームに画像を表示するための値
-      const [imageUrl, setImageUrl] = useState<string | null>(null);
-      const navigate = useNavigate();
-    
-      // アップロード画像ファイルの管理
-      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-          const name = file.name;
-          setImageUrl(URL.createObjectURL(file));
-          setValue("imageName", name);
-        } else {
-          setValue("imageName", "");
-        }
-      };
-    
-      // 編集ボタン押下時
-      const OnEdit: SubmitHandler<Hotel> = (data) => {
-        console.log("Form submitted:", data);
-        const url = `http://localhost:8080/admin/hotels/${data.id}/update`;
-        try {
-          // 旅館編集のAPI
-          const result = fetch(url, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(data),
-          });
-    
-          console.log("success!");
-          console.log(result);
-    
-          // 成功したら画面一覧に戻る
-          navigate(`/`);
-        } catch (error) {
-          console.log("failed・・・");
-          console.error(`error = ${error}`);
-        }
-      };
-    
-    return (
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Hotel>();
+
+  // フォームに画像を表示するための値
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // アップロード画像ファイルの管理
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const name = file.name;
+      setImageUrl(URL.createObjectURL(file));
+      setValue("imageName", name);
+    } else {
+      setValue("imageName", "");
+    }
+  };
+
+  // 編集ボタン押下時
+  const OnEdit: SubmitHandler<Hotel> = (data) => {
+    console.log("Form submitted:", data);
+    const url = `http://localhost:8080/admin/hotels/${data.id}/update`;
+    try {
+      // 旅館編集のAPI
+      const result = fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      console.log("success!");
+      console.log(result);
+
+      // 成功したら画面一覧に戻る
+      navigate(`/admin/hotels`);
+    } catch (error) {
+      console.log("failed・・・");
+      console.error(`error = ${error}`);
+    }
+  };
+
+  return (
     <>
       <div className="container pt-4 pb-5 samuraitravel-container">
         <div className="row justify-content-center">
           <div className="col-xl-5 col-lg-6 col-md-8">
-
             {/* パンくずリスト */}
             <nav className="mb-4" aria-label="breadcrumb">
               <ol className="breadcrumb mb-0">
@@ -91,12 +78,12 @@ const HotelEdit = () => {
             <h1 className="mb-4 text-center">民宿編集</h1>
 
             <form onSubmit={handleSubmit(OnEdit)}>
-                {/* 非表示のIDフィールド */}
-               <input
-                   type="hidden"
-                   defaultValue={hotel.id}
-                   {...register("id")}
-               />
+              {/* 非表示のIDフィールド */}
+              <input
+                type="hidden"
+                defaultValue={hotel.id}
+                {...register("id")}
+              />
 
               {/* 宿泊施設名 */}
               <div className="form-group row mb-3">
@@ -388,14 +375,13 @@ const HotelEdit = () => {
         </div>
       </div>
     </>
-    );
-}
+  );
+};
 
 export const AdminHotelEdit = () => {
-    return (
-      <div>
-        <HotelEdit />
-      </div>
-    );
-  };
-  
+  return (
+    <div>
+      <HotelEdit />
+    </div>
+  );
+};

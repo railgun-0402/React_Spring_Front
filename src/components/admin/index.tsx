@@ -3,6 +3,7 @@ import { ConfirmDialog } from "../dialog/index";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import "./style.css";
+import { Hotel } from "../../models/Hotel";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,23 +12,13 @@ import {
 } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-interface Hotel {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  postalCode: string;
-  address: string;
-  phoneNumber: string;
-}
-
 interface HotelListProps {
   hotels: Hotel[];
 }
 
 /* 検索ワード */
 interface Search {
-  word: string
+  word: string;
 }
 
 // 画面遷移制御
@@ -64,10 +55,7 @@ const HotelShow = () => {
   const searchAPIUrl = "http://localhost:8080/admin/hotels/search";
   const deleteAPIUrl = "http://localhost:8080/admin/hotels/delete";
 
-  const {
-    register,
-    handleSubmit
-  } = useForm<Search>();
+  const { register, handleSubmit } = useForm<Search>();
 
   // 旅館詳細画面へ遷移
   const MoveToDetail = (id: number) => {
@@ -92,12 +80,9 @@ const HotelShow = () => {
   // 確認ダイアログで「はい」を押下
   const handleConfirm = async () => {
     // 施設削除APIを実行
-    const response = await axios.get(
-      `${deleteAPIUrl}/${id}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await axios.get(`${deleteAPIUrl}/${id}`, {
+      method: "GET",
+    });
     console.log("API Response:", response);
 
     if (response.status === 200) {
@@ -111,7 +96,7 @@ const HotelShow = () => {
   };
 
   // 検索ボタン押下時
-  const handleSearch: SubmitHandler<Search> = async(data) => {
+  const handleSearch: SubmitHandler<Search> = async (data) => {
     // 空でAPIをリクエストするとエラーになる
     if (!data.word || data.word.trim() === "") return;
 

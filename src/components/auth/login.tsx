@@ -1,11 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { User } from "../../models/User";
 import { SubmitHandler, useForm } from "react-hook-form";
-
-interface User {
-  name: string;
-  password: string;
-}
 
 export const Login = () => {
   const [loginFailed, setLoginFailed] = useState(false);

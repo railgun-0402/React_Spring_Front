@@ -1,18 +1,7 @@
 import React, { useState } from "react";
+import { Hotel } from "../../../models/Hotel";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
-interface Hotel {
-  name: string;
-  imageName: string;
-  image: string;
-  description: string;
-  price: number;
-  capacity: number;
-  postalCode: string;
-  address: string;
-  phoneNumber: string;
-}
 
 const HotelRegister = () => {
   const {

@@ -1,5 +1,6 @@
 import Admin from "../admin/index";
 import { Login } from "../auth/login";
+import { AdminUsers } from "../admin/users/list";
 import { AdminDetail } from "../admin/detail/index";
 import { AdminHotelEdit } from "../admin/edit";
 import { AdminRegister } from "../admin/register/index";
@@ -28,7 +29,13 @@ export function HomeScreen() {
         {/* ホテル編集画面 */}
         <Route path="/admin/hotels/edit/:id" element={<AdminHotelEdit />} />
         {/* ホテル新規登録画面 */}
-        <Route path="/admin/hotels/detail/register" element={<AdminRegister />} />
+        <Route
+          path="/admin/hotels/detail/register"
+          element={<AdminRegister />}
+        />
+
+        {/* ユーザ一覧管理画面 */}
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
     </Router>
   );
@@ -41,6 +48,11 @@ export const Home = () => {
   /** ホテル画面遷移 */
   const MoveToHotel = () => {
     navigate(`/admin/hotels`);
+  };
+
+  /** ユーザ一覧画面遷移 */
+  const MoveToUsers = () => {
+    navigate(`/admin/users`);
   };
 
   return (
@@ -67,7 +79,11 @@ export const Home = () => {
 
             {/* ユーザ管理画面遷移 */}
             <div className="col-md-4">
-              <div className="card custom-card">
+              <div
+                className="card custom-card"
+                onClick={MoveToUsers}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="card-body">
                   <h5 className="card-title text-success">ユーザ管理</h5>
                   <p className="card-text">ユーザの管理を行います。</p>
